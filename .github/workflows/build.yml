@@ -78,16 +78,16 @@ jobs:
                   table_of_contents: true
 
             - name: Add Header and Footers
-              run: sudo bash ./.github/workflows/headerFooter.sh -a 'Jannis Milz' -t 'Markdown Concept Template' -v ${{ github.event.release.tag_name || 'dev' }}
+              run: sudo bash ./.github/workflows/headerFooter.sh -a 'Jannis Milz' -t '3 Million Words Of Wisdom' -v ${{ github.event.release.tag_name || 'dev' }}
 
             - name: Merge PDFs Together
               run: |
                   sudo apt-get update
                   sudo apt-get install -y pdftk
-                  sudo pdftk pdfs/frontpage.pdf pdfs/finalChapters.pdf cat output pdfs/concept.pdf
+                  sudo pdftk pdfs/frontpage.pdf pdfs/finalChapters.pdf cat output pdfs/3milWordsOfWisdom.pdf
 
             - name: Upload PDF To Artifacts
               uses: actions/upload-artifact@v3
               with:
                   name: PDF
-                  path: pdfs/concept.pdf
+                  path: pdfs/3milWordsOfWisdom.pdf

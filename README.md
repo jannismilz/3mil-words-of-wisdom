@@ -1,3 +1,3 @@
-# Markdown Concept Template
+# 3'000'000 Words Of Wisdom
 
-![Pipeline status](https://github.com/jannismilz/markdown-concept-template/actions/workflows/build.yml/badge.svg)
+![Pipeline status](https://github.com/jannismilz/3mil-words-of-wisdom/actions/workflows/build.yml/badge.svg)
