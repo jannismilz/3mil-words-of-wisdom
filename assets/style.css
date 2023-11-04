@@ -9,6 +9,11 @@ table {
     text-align: left !important;
 }
 
-h1 {
+h1,
+h2 {
     text-align: center;
+}
+
+img {
+    height: 400px;
 }
