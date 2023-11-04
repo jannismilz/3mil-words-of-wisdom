@@ -1,5 +1,3 @@
-![DevOps Image](../assets/images/devops.jpeg)
+# 3 Million Words Of Widsom
 
-# Markdown Concept Template
-
-My Name
+Jannis Milz
