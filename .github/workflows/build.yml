@@ -1,0 +1,93 @@
+name: "Build Document"
+
+on:
+    push:
+        branches:
+            - "master"
+    release:
+        types: [published]
+
+jobs:
+    converttopdf:
+        name: Build PDF Document
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Select Front Page
+              run: |
+                  find ./chapters -type f -name '00_*.md' -print0 |
+                  xargs -0 cat |
+                  sed -e '$s|$|\n\n|' > frontpage.md
+
+            - name: Convert Frontpage Markdown To PDF
+              uses: baileyjm02/markdown-to-pdf@v1
+              with:
+                  input_dir: frontpage.md
+                  output_dir: pdfs
+                  images_dir: assets/images
+                  # for example <img src="./images/file-name.png">
+                  image_import: ../assets/images
+                  # Default is true, can set to false to only get PDF files
+                  build_html: false
+                  theme: ./assets/style.css
+                  extend_default_theme: true
+
+            - name: Merge All Chapters Together For No ToC
+              # Automatically split multiple pages by a pagebreak element
+              run: |
+                  mkdir -p temp &&
+                  find ./chapters -type f -name '*.md' ! -name '00_*.md' -print0 |
+                  sort -z |
+                  xargs -0 awk 'FNR==1 && NR!=1 {print "\n<div class=\"pagebreak\"></div>\n"} {print}' > temp/noToC.md
+
+            - name: Convert Chapters Markdown To PDF Without ToC
+              uses: baileyjm02/markdown-to-pdf@v1
+              with:
+                  input_dir: temp/noToC.md
+                  output_dir: pdfs/
+                  images_dir: assets/images
+                  # for example <img src="./images/file-name.png">
+                  image_import: ../assets/images
+                  # Default is true, can set to false to only get PDF files
+                  build_html: false
+                  theme: ./assets/style.css
+                  extend_default_theme: true
+
+            - name: Merge All Chapters Together For ToC
+              # Automatically split multiple pages by a pagebreak element
+              run: |
+                  find ./chapters -type f -name '*.md' ! -name '00_*.md' -print0 |
+                  sort -z |
+                  xargs -0 awk 'FNR==1 {print "\n<div class=\"pagebreak\"></div>\n"} {print}' > chapters.md
+
+            - name: Convert Chapters Markdown To PDF With ToC
+              uses: baileyjm02/markdown-to-pdf@v1
+              with:
+                  input_dir: chapters.md
+                  output_dir: pdfs/
+                  images_dir: assets/images
+                  # for example <img src="./images/file-name.png">
+                  image_import: ../assets/images
+                  # Default is true, can set to false to only get PDF files
+                  build_html: false
+                  theme: ./assets/style.css
+                  template: ./template/template.html
+                  extend_default_theme: true
+                  table_of_contents: true
+
+            - name: Add Header and Footers
+              run: sudo bash ./.github/workflows/headerFooter.sh -a 'Jannis Milz' -t 'Markdown Concept Template' -v ${{ github.event.release.tag_name || 'dev' }}
+
+            - name: Merge PDFs Together
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y pdftk
+                  sudo pdftk pdfs/frontpage.pdf pdfs/finalChapters.pdf cat output pdfs/concept.pdf
+
+            - name: Upload PDF To Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: PDF
+                  path: pdfs/concept.pdf

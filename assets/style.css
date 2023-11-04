@@ -1,0 +1,10 @@
+@media print {
+    .pagebreak {
+        page-break-after: always;
+    }
+}
+
+table {
+    display: table !important;
+    text-align: left !important;
+}
