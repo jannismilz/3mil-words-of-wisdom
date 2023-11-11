@@ -1,3 +1,5 @@
+![Front Image](../assets/covers/frontImage.jpeg)
+
 # 3 Million Words Of Widsom
 
-Jannis Milz
+_By Jannis Milz_
