@@ -10,6 +10,9 @@
 % Import last to avoid problems
 \usepackage{hyperref}
 
+% Counter for page numbers
+\newcounter{pageNumber}
+
 \providecommand{\author}{}
 \providecommand{\title}{}
 \providecommand{\version}{}
@@ -20,21 +23,17 @@
 \renewcommand{\headrulewidth}{0pt}
 
 \fancypagestyle{roman}{
-  \pagenumbering{roman}
-
-  \fancyfoot[CO]{\textcolor{black!50}{\thepage}}
+  \fancyfoot[CO]{\textcolor{black!50}{\roman{pageNumber}}}
 }
 
 \fancypagestyle{arabic}{
-  \pagenumbering{arabic}
-
   \fancyhead[RO]{\textcolor{black!50}{\title}}
 
   \fancyfoot[LO]{\textcolor{black!50}{\author}}
-  \fancyfoot[CO]{\textcolor{black!50}{\thepage}}
+  \fancyfoot[CO]{\textcolor{black!50}{\arabic{pageNumber}}}
   \fancyfoot[RO]{\textcolor{black!50}{v\version}}
 }
 
 \begin{document}
-  \includepdf[pagecommand={\thispagestyle{\numberingType}},pages=-]{\pdfDoc}
+  \includepdf[pagecommand={\thispagestyle{\numberingType}\stepcounter{pageNumber}},pages=-]{\pdfDoc}
 \end{document}
