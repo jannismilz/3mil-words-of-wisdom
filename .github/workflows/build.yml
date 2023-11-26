@@ -38,9 +38,9 @@ jobs:
               with:
                   input_dir: frontpage.md
                   output_dir: pdfs
-                  images_dir: assets/covers
+                  images_dir: assets/images
                   # for example <img src="./images/file-name.png">
-                  image_import: ../assets/covers
+                  image_import: ../assets/images
                   # Default is true, can set to false to only get PDF files
                   build_html: false
                   theme: ./assets/style.css
@@ -59,9 +59,9 @@ jobs:
               with:
                   input_dir: temp/noToC.md
                   output_dir: pdfs/
-                  images_dir: assets/covers
+                  images_dir: assets/images
                   # for example <img src="./images/file-name.png">
-                  image_import: ../assets/covers
+                  image_import: ../assets/images
                   # Default is true, can set to false to only get PDF files
                   build_html: false
                   theme: ./assets/style.css
@@ -79,9 +79,9 @@ jobs:
               with:
                   input_dir: chapters.md
                   output_dir: pdfs/
-                  images_dir: assets/covers
+                  images_dir: assets/images
                   # for example <img src="./images/file-name.png">
-                  image_import: ../assets/covers
+                  image_import: ../assets/images
                   # Default is true, can set to false to only get PDF files
                   build_html: false
                   theme: ./assets/style.css
