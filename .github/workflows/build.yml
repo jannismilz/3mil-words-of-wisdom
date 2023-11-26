@@ -11,6 +11,7 @@ jobs:
     converttopdf:
         name: Build PDF Document
         runs-on: ubuntu-latest
+        environment: notion
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
