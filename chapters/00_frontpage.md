@@ -1,4 +1,4 @@
-![Front Image](../assets/covers/frontImage.jpeg)
+![Front Image](../assets/images/frontImage.jpeg)
 
 # 3 Million Words Of Widsom
 
