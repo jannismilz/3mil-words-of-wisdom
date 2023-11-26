@@ -9,7 +9,7 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 
 let data = {};
 
-(async () => {
+async function parseNotionData() {
     const databaseId = "60e41de9789c4dfc84f08ca2feec20d5";
     const response = await notion.databases.query({
         database_id: databaseId,
@@ -29,34 +29,55 @@ let data = {};
                 },
             ],
         },
+        sorts: [
+            {
+                property: "Calendar week",
+                direction: "ascending",
+            },
+        ],
     });
 
-    response.results.forEach(async (result) => {
+    let totalProccessed = 0;
+
+    response.results.forEach(async (result, index) => {
         const mdblocks = await n2m.pageToMarkdown(result.id);
         const mdString = n2m.toMarkdownString(mdblocks);
 
-        if (
-            !data.hasOwnProperty(result.properties["Calendar week"]["number"])
-        ) {
-            data[result.properties["Calendar week"]["number"]] = [];
+        const calendarWeek = JSON.stringify(
+            result.properties["Calendar week"]["number"]
+        );
+
+        if (!data.hasOwnProperty(calendarWeek)) {
+            data[calendarWeek] = [];
         }
 
-        data[result.properties["Calendar week"]["number"]].push({
-            image: result.properties["Cover"]["files"][0]["name"],
+        console.log(index);
+
+        data[calendarWeek].push({
+            image: result.properties["Cover"]["files"][0]["file"]["url"],
             title: result.properties["Name"]["title"][0]["plain_text"],
             author: result.properties["Author"]["rich_text"][0]["plain_text"],
             wordsCount: result.properties["Words count"]["number"],
-            takeAways: mdString.parent,
+            takeAways: mdString.parent || "",
         });
-    });
-})();
 
-Object.keys(data).forEach(async (weekNr) => {
-    let page = `# ${weekNr}. Calendar week
+        totalProccessed++;
+
+        if (totalProccessed === response.results.length) {
+            await generateChapters();
+        }
+    });
+}
+
+async function generateChapters() {
+    console.log(data);
+
+    Object.keys(data).forEach(async (weekNr) => {
+        let page = `# ${weekNr}. Calendar week
     `;
 
-    data[weekNr].forEach((book, index) => {
-        page += `
+        data[weekNr].forEach((book, index) => {
+            page += `
         ![${book.title}](${book.image})
 
         ## ${book.title}
@@ -70,14 +91,17 @@ Object.keys(data).forEach(async (weekNr) => {
         ${book.takeAways}
       `;
 
-        if (data[weekNr][index + 1]) {
-            page += `
+            if (data[weekNr][index + 1]) {
+                page += `
         <div class="pagebreak"></div>
             `;
-        }
+            }
+        });
+
+        page = page.replace(/^ +/gm, "");
+
+        await Bun.write(`./chapters/${weekNr}_cw.md`, page);
     });
+}
 
-    page = page.replace(/^ +/gm, "");
-
-    await Bun.write(`./chapters/${weekNr}_cw.md`, page);
-});
+await parseNotionData();
