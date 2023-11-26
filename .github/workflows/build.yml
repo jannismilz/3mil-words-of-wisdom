@@ -20,11 +20,11 @@ jobs:
                   bun-version: latest
 
             - name: Install Dependencies
-              env:
-                  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
               run: |
                   bun install
                   bun script.js
+              env:
+                  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
 
             - name: Select Front Page
               run: |
