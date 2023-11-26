@@ -83,7 +83,9 @@ async function generateChapters() {
         ## ${book.title}
 
         <p class="text-gray-light">
-            <em>${book.author} • ${book.wordsCount} words</em>
+            <em>${book.author} • ${book.wordsCount.toLocaleString(
+                "en-US"
+            )} words</em>
         </p>
 
         <h3>Key takeaways</h3>
