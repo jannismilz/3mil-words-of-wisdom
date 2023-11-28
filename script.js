@@ -51,8 +51,6 @@ async function parseNotionData() {
             data[calendarWeek] = [];
         }
 
-        console.log(index);
-
         data[calendarWeek].push({
             image: result.properties["Cover"]["files"][0]["file"]["url"],
             title: result.properties["Name"]["title"][0]["plain_text"],
@@ -70,8 +68,6 @@ async function parseNotionData() {
 }
 
 async function generateChapters() {
-    console.log(data);
-
     Object.keys(data).forEach(async (weekNr) => {
         let page = `# ${weekNr}. Calendar week
     `;
