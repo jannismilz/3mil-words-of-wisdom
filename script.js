@@ -74,24 +74,22 @@ async function generateChapters() {
 
         data[weekNr].forEach((book, index) => {
             page += `
-        ![${book.title}](${book.image})
+![${book.title}](${book.image})
 
-        ## ${book.title}
+## ${book.title}
 
-        <p class="text-gray-light">
-            <em>${book.author} • ${book.wordsCount.toLocaleString(
-                "en-US"
-            )} words</em>
-        </p>
+<p class="text-gray-light">
+    <em>${book.author} • ${book.wordsCount.toLocaleString("en-US")} words</em>
+</p>
 
-        <h3>Key takeaways</h3>
+<h3>Key takeaways</h3>
 
-        ${book.takeAways}
+${book.takeAways}
       `;
 
             if (data[weekNr][index + 1]) {
                 page += `
-        <div class="pagebreak"></div>
+<div class="pagebreak"></div>
             `;
             }
         });
