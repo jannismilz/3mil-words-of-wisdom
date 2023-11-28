@@ -96,8 +96,6 @@ async function generateChapters() {
             }
         });
 
-        page = page.replace(/^ +/gm, "");
-
         await Bun.write(`./chapters/${weekNr}_cw.md`, page);
     });
 }
